@@ -21,14 +21,15 @@
 
     <EditText
         android:id="@+id/editText_loginPassword"
+        style="@android:style/Widget.EditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="Şifre Giriniz"
-        style="@android:style/Widget.EditText"
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="@+id/editText_loginEmail"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editText_loginEmail"
         app:layout_constraintTop_toBottomOf="@+id/editText_loginEmail" />
 
@@ -44,4 +45,17 @@
         app:layout_constraintEnd_toEndOf="@+id/editText_loginPassword"
         app:layout_constraintStart_toStartOf="@+id/editText_loginPassword"
         app:layout_constraintTop_toBottomOf="@+id/editText_loginPassword" />
+
+    <Button
+        android:id="@+id/btn_signIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="#F62525"
+        android:text="Üye Ol"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
