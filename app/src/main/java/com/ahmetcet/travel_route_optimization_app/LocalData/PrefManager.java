@@ -9,7 +9,6 @@ public class PrefManager {
     final public static String key_username="username";
     final public static String key_password="password";
     final public static String key_firstName="firstname";
-
     final public static String key_surname="surname";
     final public static String key_userId="userId";
     //////
