@@ -12,6 +12,7 @@ public class PrefManager {
     final public static String key_surname="surname";
     final public static String key_userId="userId";
 
+
     //Key - Value user ınfoya kaydeder.
     public static void putPref_UserInfo(String key, String value, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(userInfo, Context.MODE_PRIVATE);
