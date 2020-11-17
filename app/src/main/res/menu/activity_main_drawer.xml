@@ -9,14 +9,20 @@
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/menu_slideshow" />
+
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_gallery" />
 
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_downloadMap"
+            android:icon="@android:drawable/ic_popup_disk_full"
+            android:title="@string/menu_offlineMap" />
+
         <item
             android:id="@+id/nav_logOut"
             android:icon="@android:drawable/ic_lock_power_off"
