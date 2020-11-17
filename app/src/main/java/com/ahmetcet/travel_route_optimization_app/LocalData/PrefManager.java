@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class PrefManager {
     public static String userInfo = "user_authentication_info";
     //userInfo
-    final public static String key_username="username";
+    final public static String key_email="email";
     final public static String key_password="password";
     final public static String key_firstName="firstname";
     final public static String key_surname="surname";
@@ -28,7 +28,7 @@ public class PrefManager {
 
     public static Boolean pref_isAuthorized(Context context) {
 
-        String pref_username = getPref_UserInfo(key_username, context);
+        String pref_username = getPref_UserInfo(key_email, context);
         String pref_pass =  getPref_UserInfo(key_password, context);
 
         if (pref_username != "" && pref_pass != "") {
@@ -40,7 +40,7 @@ public class PrefManager {
 
     public static void pref_delete_Authority( Context context) {
         try{
-            putPref_UserInfo(key_username,"",context);
+            putPref_UserInfo(key_email,"",context);
             putPref_UserInfo(key_password,"",context);
             putPref_UserInfo(key_userId,"",context);
             putPref_UserInfo(key_firstName,"",context);
