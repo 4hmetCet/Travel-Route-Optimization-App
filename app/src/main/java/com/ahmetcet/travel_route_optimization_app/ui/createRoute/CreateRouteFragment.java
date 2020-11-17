@@ -1,4 +1,4 @@
-package com.ahmetcet.travel_route_optimization_app.ui.slideshow;
+package com.ahmetcet.travel_route_optimization_app.ui.createRoute;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ahmetcet.travel_route_optimization_app.R;
 
-public class SlideshowFragment extends Fragment {
+public class CreateRouteFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private CreateRouteViewModel createRouteViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        createRouteViewModel =
+                new ViewModelProvider(this).get(CreateRouteViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_create_route, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        createRouteViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

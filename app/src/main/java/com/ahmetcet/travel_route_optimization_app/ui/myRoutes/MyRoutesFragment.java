@@ -1,4 +1,4 @@
-package com.ahmetcet.travel_route_optimization_app.ui.gallery;
+package com.ahmetcet.travel_route_optimization_app.ui.myRoutes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ahmetcet.travel_route_optimization_app.R;
 
-public class GalleryFragment extends Fragment {
+public class MyRoutesFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private MyRoutesViewModel myRoutesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        myRoutesViewModel =
+                new ViewModelProvider(this).get(MyRoutesViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_my_routes, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        myRoutesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

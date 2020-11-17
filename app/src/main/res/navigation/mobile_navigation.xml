@@ -12,14 +12,20 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.ahmetcet.travel_route_optimization_app.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_myRoutes"
+        android:name="com.ahmetcet.travel_route_optimization_app.ui.myRoutes.MyRoutesFragment"
+        android:label="@string/menu_myRoutes"
+        tools:layout="@layout/fragment_my_routes" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.ahmetcet.travel_route_optimization_app.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_createRoute"
+        android:name="com.ahmetcet.travel_route_optimization_app.ui.createRoute.CreateRouteFragment"
+        android:label="@string/menu_createRoute"
+        tools:layout="@layout/fragment_create_route" />
+
+    <fragment
+        android:id="@+id/nav_offlineMap"
+        android:name="com.ahmetcet.travel_route_optimization_app.ui.offlineMap.OfflineMapFragment"
+        android:label="@string/menu_offlineMap"
+        tools:layout="@layout/fragment_offline_map" />
 </navigation>

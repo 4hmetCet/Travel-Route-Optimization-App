@@ -9,9 +9,9 @@
     <string name="action_settings">Ayarlar</string>
 
     <string name="menu_home">Anasayfa</string>
-    <string name="menu_gallery">Rotalarım</string>
+    <string name="menu_myRoutes">Rotalarım</string>
     <string name="menu_offlineMap">Çevrimdışı Harita</string>
-    <string name="menu_slideshow">Rota Oluştur</string>
+    <string name="menu_createRoute">Rota Oluştur</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -6,20 +6,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/ic_dialog_map"
+            android:icon="@android:drawable/btn_star_big_on"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_createRoute"
             android:icon="@android:drawable/ic_dialog_map"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_createRoute" />
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_myRoutes"
             android:icon="@android:drawable/ic_dialog_map"
-            android:title="@string/menu_gallery" />
+            android:title="@string/menu_myRoutes" />
 
         <item
-            android:id="@+id/nav_downloadMap"
+            android:id="@+id/nav_offlineMap"
             android:icon="@android:drawable/ic_popup_disk_full"
             android:title="@string/menu_offlineMap" />
 
