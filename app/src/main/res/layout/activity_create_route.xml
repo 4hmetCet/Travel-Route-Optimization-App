@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".CreateRouteActivity">
 
+
+
     <Button
         android:id="@+id/btn_openMap"
         android:layout_width="193dp"

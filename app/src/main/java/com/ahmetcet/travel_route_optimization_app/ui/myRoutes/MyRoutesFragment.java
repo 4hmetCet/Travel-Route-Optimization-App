@@ -23,7 +23,7 @@ public class MyRoutesFragment extends Fragment {
         myRoutesViewModel =
                 new ViewModelProvider(this).get(MyRoutesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_routes, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
+        final TextView textView = root.findViewById(R.id.text_home);
         myRoutesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

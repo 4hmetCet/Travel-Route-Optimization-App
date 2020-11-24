@@ -30,7 +30,7 @@ public class AppMainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startActivity(new Intent(AppMainActivity.this,CreateRouteActivity.class));
+               startActivity(new Intent(AppMainActivity.this,MapActivity.class));
             }
         });
 
