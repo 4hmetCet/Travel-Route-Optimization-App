@@ -3,7 +3,9 @@ package com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PointWithConstraints {
+    private String routeId;
     private String pointId;
+    private int order;
     private String pointName;
     private LatLng pointLocation;
     private String earliestTime;
@@ -11,6 +13,14 @@ public class PointWithConstraints {
     private int priority;
     private String previousPointId;
 
+
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public void setEarliestTime(String earliestTime) {
         this.earliestTime = earliestTime;
@@ -40,12 +50,21 @@ public class PointWithConstraints {
         this.priority = priority;
     }
 
+
+    public String getRouteId() {
+        return routeId;
+    }
+
     public String getEarliestTime() {
         return earliestTime;
     }
 
     public int getPriority() {
         return priority;
+    }
+
+    public int getOrder() {
+        return order;
     }
 
     public LatLng getPointLocation() {
