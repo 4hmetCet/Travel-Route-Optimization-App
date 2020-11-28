@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ThemedSpinnerAdapter;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 
@@ -17,8 +18,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        CheckAuthentication();
     }
 
+    private void CheckAuthentication() {
+        if(PrefManager.pref_isAuthorized(LoginActivity.this)){
+            startActivity(new Intent(LoginActivity.this,AppMainActivity.class));
+        }
+    }
     public void Login(View view) {
         EditText edt_loginMail = (EditText) findViewById(R.id.editText_loginEmail);
         String input_loginMail = edt_loginMail.getText().toString();

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private final static float cameraZoomLevel = 18.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         // Add a marker in Sydney and move the camera
         LatLng my_loc = new LatLng(40.8238, 29.3718);
         mMap.addMarker(new MarkerOptions().position(my_loc).title("Buradasınız"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(my_loc, 18.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(my_loc, cameraZoomLevel));
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -59,7 +61,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
                 LayoutInflater inflater = MapActivity.this.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_route_constraints, null);
-                RatingBar ratingBar_priority = (RatingBar) dialogView.findViewById(R.id.ratingBar_priority);
+                final RatingBar ratingBar_priority = (RatingBar) dialogView.findViewById(R.id.ratingBar_priority);
+                ratingBar_priority.setNumStars(5);
+                ratingBar_priority.setStepSize(1f);
 
                 Button button_setPoint = (Button) dialogView.findViewById(R.id.button_setPoint);
                 final EditText editText_pointName = (EditText) dialogView.findViewById(R.id.editText_pointExplanation);
@@ -67,17 +71,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 button_setPoint.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        PointWithConstraints point = new PointWithConstraints();
                         if(editText_pointName.getText().toString().length()== 0){
                             editText_pointName.setError("Konum ismi girmelisiniz");
                             return;
                         }
+
                         mMap.addMarker(new MarkerOptions().position(latLng)
                                 .icon(BitmapDescriptorFactory
                                         .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                 .title(editText_pointName.getText().toString())
                         );
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomLevel));
 
+                        point.setPriority((int)ratingBar_priority.getRating());
                         if(spinnerDialog.isShowing())
                             spinnerDialog.dismiss();
                     }
@@ -85,7 +92,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
                 spinnerDialog.setContentView(dialogView);
                 spinnerDialog.setCancelable(true);
-                spinnerDialog.getWindow().setLayout(900,1000);
+                spinnerDialog.getWindow().setLayout(1000,1400);
                 //spinnerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 spinnerDialog.show();
 
@@ -99,4 +106,5 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         progressDialog.create();
         progressDialog.show();
     }
+
 }

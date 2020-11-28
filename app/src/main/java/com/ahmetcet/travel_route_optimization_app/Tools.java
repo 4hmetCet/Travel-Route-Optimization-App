@@ -7,12 +7,13 @@ import android.view.View;
 import androidx.appcompat.app.AlertDialog;
 
 public class Tools {
-    public static void ShowProgressDialog(Context context, boolean isCancelable){
+    public static ProgressDialog ShowProgressDialog(Context context, String message, boolean isCancelable){
         ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Lütfen bakleyiniz...");
+        progressDialog.setMessage(message);
         progressDialog.setCancelable(isCancelable);
         progressDialog.create();
         progressDialog.show();
+        return progressDialog;
     }
 
     public static void ShowAlertDialog(Context context, String message, boolean isCancelable){
