@@ -1,10 +1,15 @@
 package com.ahmetcet.travel_route_optimization_app;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -39,12 +44,30 @@ public class AppMainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_myRoutes, R.id.nav_createRoute, R.id.nav_offlineMap, R.id.nav_logOut)
+                R.id.nav_home, R.id.nav_myRoutes, R.id.nav_createRoute, R.id.nav_offlineMap)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        MenuItem logOutItem = navigationView.getMenu().findItem(R.id.nav_logOut);
+        logOutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Tools.ShowAlertDialog(AppMainActivity.this, "Oturumu kapatmak istediğinize emin misiniz?",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PrefManager.pref_delete_Authority(AppMainActivity.this);
+                                startActivity(new Intent(AppMainActivity.this,LoginActivity.class));
+                            }
+                        },true);
+                return true;
+            }
+        });
+
+
+
 
     }
 
@@ -54,7 +77,6 @@ public class AppMainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.app_main, menu);
         return true;
     }
-
 
 
     @Override

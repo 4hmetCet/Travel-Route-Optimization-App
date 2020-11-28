@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,15 +26,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private final static float cameraZoomLevel = 18.0f;
+    private String routeId = null;
+    private ArrayList<PointWithConstraints> pointList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        routeId = UUID.randomUUID().toString();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -84,7 +92,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         );
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomLevel));
 
+                        point.setPointName(editText_pointName.getText().toString());
+                        point.setPointId(UUID.randomUUID().toString());
+                        point.setRouteId(routeId);
+                        point.setPointLocation(latLng);
                         point.setPriority((int)ratingBar_priority.getRating());
+                        pointList.add(point);
                         if(spinnerDialog.isShowing())
                             spinnerDialog.dismiss();
                     }
@@ -107,4 +120,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         progressDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }
