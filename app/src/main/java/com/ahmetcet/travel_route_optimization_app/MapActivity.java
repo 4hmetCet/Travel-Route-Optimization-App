@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.TimePicker;
 
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -72,9 +75,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 final RatingBar ratingBar_priority = (RatingBar) dialogView.findViewById(R.id.ratingBar_priority);
                 ratingBar_priority.setNumStars(5);
                 ratingBar_priority.setStepSize(1f);
-
                 Button button_setPoint = (Button) dialogView.findViewById(R.id.button_setPoint);
                 final EditText editText_pointName = (EditText) dialogView.findViewById(R.id.editText_pointExplanation);
+                final EditText editText_earliestTimePicker = (EditText) dialogView.findViewById(R.id.editText_earliestTime);
+                GetTimePickerEvent(editText_earliestTimePicker);
+
+                final EditText editText_latestTimePicker = (EditText) dialogView.findViewById(R.id.editText_latestTime);
+                GetTimePickerEvent(editText_latestTimePicker);
+
 
                 button_setPoint.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -124,5 +132,29 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onBackPressed() {
         super.onBackPressed();
 
+    }
+
+    public void GetTimePickerEvent(final EditText editText_timePicker){
+
+        editText_timePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View dialogView = View.inflate(MapActivity.this, R.layout.dialog_time_picker, null);
+                final AlertDialog alertDialog = new AlertDialog.Builder(MapActivity.this).create();
+                final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
+                timePicker.setIs24HourView(true);
+
+                dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String time = timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute();
+                        editText_timePicker.setText(time);
+                        alertDialog.dismiss();
+                    }});
+
+                alertDialog.setView(dialogView);
+                alertDialog.show();
+            }
+        });
     }
 }

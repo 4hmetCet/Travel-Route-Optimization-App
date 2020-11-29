@@ -18,12 +18,6 @@
         tools:layout="@layout/fragment_my_routes" />
 
     <fragment
-        android:id="@+id/nav_createRoute"
-        android:name="com.ahmetcet.travel_route_optimization_app.ui.createRoute.CreateRouteFragment"
-        android:label="@string/menu_createRoute"
-        tools:layout="@layout/fragment_create_route" />
-
-    <fragment
         android:id="@+id/nav_offlineMap"
         android:name="com.ahmetcet.travel_route_optimization_app.ui.offlineMap.OfflineMapFragment"
         android:label="@string/menu_offlineMap"
