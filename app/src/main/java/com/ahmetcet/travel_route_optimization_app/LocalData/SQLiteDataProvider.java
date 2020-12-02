@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,10 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
     protected static final String column_P_PreviousPointId = "PREVIOUS_POINT_ID";
     //endregion
 
+    //region Routes
+
+    //endregion
+
 
 
     public SQLiteDataProvider(Context context) {
@@ -43,10 +49,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
                     + "(" + column_P_RouteId + " TEXT,"
                     + column_P_PointId + " TEXT,"
                     + column_P_PointName + " TEXT,"
-                    + column_P_Order + " TEXT,"
-                    + column_P_PointLocation + " REAL,"
-                    + column_P_EarliestTime + " REAL,"
-                    + column_P_Priority + " TEXT)";
+                    + column_P_Order + " INT,"
+                    + column_P_PointLocation + " TEXT,"
+                    + column_P_EarliestTime + " TEXT,"
+                    + column_P_LatestTime + " TEXT,"
+                    + column_P_Priority + " INT,"
+                    + column_P_PreviousPointId + " TEXT)";
 
             db.execSQL(query_create_TABLE_tbPOINTS);
 
@@ -64,57 +72,91 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteData(){
+    public boolean deleteRouteData(String routeID){
         try{
             SQLiteDatabase db = this.getWritableDatabase();
-            String query = "DELETE FROM " + table_Points;
+            String query = "DELETE FROM " + table_Points + " WHERE " + column_P_RouteId + " IS " + routeID;
             db.execSQL(query);
             db.close();
+            return true;
 
         }catch (Exception e){
+            return false;
         }
     }
 
-    public void insertPoint(PointWithConstraints pointWithConstraints) {
+    public void insertPointList(ArrayList<PointWithConstraints> pointWithConstraints) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(column_P_RouteId, "");
-            db.insert(table_Points, null, values);
+            Gson gson = new Gson();
+            for (PointWithConstraints point:
+                 pointWithConstraints) {
+                ContentValues values = new ContentValues();
+                values.put(column_P_RouteId, point.getRouteId());
+                values.put(column_P_PointId, point.getPointId());
+                values.put(column_P_PointName, point.getPointName());
+                values.put(column_P_Order, point.getOrder());
+                values.put(column_P_PointLocation, gson.toJson(point.getPointLocation()));
+                values.put(column_P_EarliestTime, point.getEarliestTime());
+                values.put(column_P_LatestTime, point.getLatestTime());
+                values.put(column_P_Priority, point.getPriority());
+                values.put(column_P_PreviousPointId, point.getPreviousPointId());
+                db.insert(table_Points, null, values);
+            }
+            db.endTransaction();
             db.close();
         } catch (SQLException e) {
             e.toString();
         }
     }
 
-    public ArrayList<PointWithConstraints> getData(Context context, double lat, double lng) {
+    public ArrayList<PointWithConstraints> getPointListByRouteId(Context context, String routeID) throws SQLException {
         ArrayList<PointWithConstraints> resultList = new ArrayList<>();
+        Gson gson = new Gson();
         try {
             SQLiteDatabase db = this.getReadableDatabase();
 
-            String query = "SELECT *  FROM " + table_Points;
+            String query = "SELECT *  FROM " + table_Points + " WHERE " + column_P_RouteId + " IS " + routeID;
 
             Cursor cursor = db.rawQuery(query,null);
-            int typeUIDOrdinal = cursor.getColumnIndex(column_P_RouteId);
-            int typeCodeOrdinal = cursor.getColumnIndex(column_P_PointId);
-            int typeNameOrdinal = cursor.getColumnIndex(column_P_PointName);
-            int latOrdinal = cursor.getColumnIndex(column_P_PointLocation);
-            int longOrdinal = cursor.getColumnIndex(column_P_EarliestTime);
-            int updateDateOrdinal = cursor.getColumnIndex(column_P_Priority);
+            int routeIDOrdinal = cursor.getColumnIndex(column_P_RouteId);
+            int pointIDOrdinal = cursor.getColumnIndex(column_P_PointId);
+            int pointNameOrdinal = cursor.getColumnIndex(column_P_PointName);
+            int pointLocationOrdinal = cursor.getColumnIndex(column_P_PointLocation);
+            int earliestTimeOrdinal = cursor.getColumnIndex(column_P_EarliestTime);
+            int latestTimeOrdinal = cursor.getColumnIndex(column_P_LatestTime);
+            int priorityOrdinal = cursor.getColumnIndex(column_P_Priority);
+            int orderOrdinal = cursor.getColumnIndex(column_P_Order);
+            int previousPointIdOrdinal = cursor.getColumnIndex(column_P_PreviousPointId);
+
             while (cursor.moveToNext()){
-                String typeUid = cursor.getString(typeUIDOrdinal);
-                String typeCode = cursor.getString(typeCodeOrdinal);
-                String typeName = cursor.getString(typeNameOrdinal);
-                float latitude = cursor.getFloat(latOrdinal);
-                float longitude = cursor.getFloat(longOrdinal);
-                String updateDate = cursor.getString(updateDateOrdinal);
+                String routeId = cursor.getString(routeIDOrdinal);
+                String pointId = cursor.getString(pointIDOrdinal);
+                String pointName = cursor.getString(pointNameOrdinal);
+                String pointLocation = cursor.getString(pointLocationOrdinal);
+                String earliestTime = cursor.getString(earliestTimeOrdinal);
+                String latestTime = cursor.getString(latestTimeOrdinal);
+                int priority = cursor.getInt(priorityOrdinal);
+                int order = cursor.getInt(orderOrdinal);
+                String previousPointId = cursor.getString(previousPointIdOrdinal);
+                PointWithConstraints point = new PointWithConstraints();
+                point.setRouteId(routeId);
+                point.setPointId(pointId);
+                point.setPointName(pointName);
+                point.setPointLocation(gson.fromJson(pointLocation, LatLng.class));
+                point.setPriority(priority);
+                point.setOrder(order);
+                point.setEarliestTime(earliestTime);
+                point.setLatestTime(latestTime);
+                point.setPreviousPointId(previousPointId);
 
-
+                resultList.add(point);
             }
             cursor.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
+            throw e;
         }
         return resultList;
     }

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TimePicker;
 
+import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -122,10 +123,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     public void OptimizeRoute(View view) {
+
         ProgressDialog progressDialog = new ProgressDialog(MapActivity.this);
-        progressDialog.setMessage("Rotanız Oluşturuluyor...");
+        progressDialog.setMessage("Rotanız Oluşturuluyor, bu işlem biraz uzun sürebilir");
         progressDialog.create();
         progressDialog.show();
+        SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(MapActivity.this);
+
     }
 
     @Override
