@@ -10,25 +10,30 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Optimize {
-    Context context;
+    private Context context;
+    private Route _route;
 
-    public Optimize(Context c){
+    public Optimize(Context c, Route route){
         context=c;
+        _route = route;
     }
 
-    public Route GetOptimizedRoute(String routeId, ArrayList<PointWithConstraints> points){
-        Route resultRoute = new Route();
-        String userId = PrefManager.getPref_UserInfo(PrefManager.key_email,context);
-        resultRoute.setRouteId(routeId);
-        resultRoute.setUserId(userId);
+    public Route GetOptimizedRoute(){
+        ArrayList<PointWithConstraints> orderedPointList = OrderPoints(_route.getPointList());
+        _route.setPointList(orderedPointList);
 
-
-        return  resultRoute;
+        return  _route;
     }
 
     private ArrayList<PointWithConstraints> OrderPoints(ArrayList<PointWithConstraints> points){
         ArrayList<PointWithConstraints> orderedPoints = new ArrayList<>();
-
+        int i = 1;
+        for (PointWithConstraints point:
+             points) {
+            point.setOrder(i);
+            orderedPoints.add(point);
+            i++;
+        }
 
         return orderedPoints;
     }

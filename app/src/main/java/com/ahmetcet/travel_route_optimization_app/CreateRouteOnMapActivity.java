@@ -20,6 +20,7 @@ import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Optimize;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -266,7 +267,9 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         progressDialog.show();
         SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(CreateRouteOnMapActivity.this);
         current_route.setPointList(currentPointList);
-        if(sqLiteDataProvider.insertRoute(current_route))
+        Optimize optimize = new Optimize(CreateRouteOnMapActivity.this,current_route);
+        Route optimizedRoute = optimize.GetOptimizedRoute();
+        if(sqLiteDataProvider.insertRoute(optimizedRoute))
             startActivity(new Intent(CreateRouteOnMapActivity.this,AppMainActivity.class));
 
     }
