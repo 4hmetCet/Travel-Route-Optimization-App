@@ -37,6 +37,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
 
     protected static final String table_Routes = "tb_Routes";
     protected static final String column_R_RouteId = "ROUTE_ID";
+    protected static final String column_R_RouteName = "ROUTE_NAME";
     protected static final String column_R_UserId = "USER_ID";
     protected static final String column_R_RouteDate = "ROUTE_DATE";
     protected static final String column_R_TravelType = "ROUTE_TRAVEL_TYPE";
@@ -72,6 +73,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
             String query_create_TABLE_tbPOINTS = "CREATE TABLE " + table_Routes
                     + "(" + column_R_RouteId + " TEXT,"
                     + column_R_UserId + " TEXT,"
+                    + column_R_RouteName + " TEXT,"
                     + column_R_RouteDate + " TEXT,"
                     + column_R_TravelType + " INT)";
 
@@ -110,15 +112,15 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         }
     }
 
-    public void insertRoute(Route route) {
+    public boolean insertRoute(Route route) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            db.beginTransaction();
             Gson gson = new Gson();
             if(route != null){
                 ContentValues values = new ContentValues();
                 values.put(column_R_RouteId, route.getRouteId());
                 values.put(column_R_UserId, route.getUserId());
+                values.put(column_R_RouteName, route.getRouteName());
                 values.put(column_R_RouteDate, route.getRouteDate());
                 values.put(column_R_TravelType, route.getTravelType());
                 db.insert(table_Routes, null, values);
@@ -137,10 +139,11 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
                 values.put(column_P_PreviousPointId, point.getPreviousPointId());
                 db.insert(table_Points, null, values);
             }
-            db.endTransaction();
             db.close();
+            return true;
         } catch (SQLException e) {
             e.toString();
+            return false;
         }
     }
 
@@ -195,7 +198,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         return resultList;
     }
 
-    public ArrayList<Route> getAllRoutes(Context context, String routeID) throws SQLException {
+    public ArrayList<Route> getAllRoutes() throws SQLException {
         ArrayList<Route> resultList = new ArrayList<>();
         Gson gson = new Gson();
         try {
@@ -206,6 +209,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query,null);
             int routeIDOrdinal = cursor.getColumnIndex(column_R_RouteId);
             int userIDOrdinal = cursor.getColumnIndex(column_R_UserId);
+            int routeNameOrdinal = cursor.getColumnIndex(column_R_RouteName);
             int routeDateOrdinal = cursor.getColumnIndex(column_R_RouteDate);
             int travelTypeOrdinal = cursor.getColumnIndex(column_R_TravelType);
 
@@ -213,11 +217,13 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
             while (cursor.moveToNext()){
                 String routeId = cursor.getString(routeIDOrdinal);
                 String userId = cursor.getString(userIDOrdinal);
+                String routeName = cursor.getString(routeNameOrdinal);
                 String routeDate = cursor.getString(routeDateOrdinal);
                 int travelType = cursor.getInt(travelTypeOrdinal);
                 Route route = new Route();
                 route.setRouteId(routeId);
                 route.setUserId(userId);
+                route.setRouteName(routeName);
                 route.setRouteDate(routeDate);
                 route.setTravelType(travelType);
 

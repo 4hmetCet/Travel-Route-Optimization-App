@@ -70,17 +70,46 @@
         app:layout_constraintStart_toStartOf="@+id/textView_travelDate"
         app:layout_constraintTop_toBottomOf="@+id/textView_travelDate" />
 
+    <TextView
+        android:id="@+id/textView_routeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Yolculuk Adını Giriniz"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView_travelDate"
+        app:layout_constraintTop_toBottomOf="@+id/editText_routeDate" />
+
+    <EditText
+        android:id="@+id/editText_routeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Yolculuk adını giriniz"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/textView_routeName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeName" />
+
     <Button
         android:id="@+id/button_saveRouteSettings"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="64dp"
         android:background="@color/colorButton"
         android:text="Kaydet"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Vazgeç"
+        android:background="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/button_saveRouteSettings"
         app:layout_constraintStart_toStartOf="parent" />
 
 

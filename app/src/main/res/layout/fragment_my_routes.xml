@@ -6,8 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.myRoutes.MyRoutesFragment">
 
+
+
     <ListView
         android:id="@+id/listview_routes"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

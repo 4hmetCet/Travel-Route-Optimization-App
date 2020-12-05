@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
     private GoogleMap mMap;
     private final static float cameraZoomLevel = 18.0f;
     private Route current_route = null;
-    private ArrayList<PointWithConstraints> pointList = new ArrayList<>();
+    private ArrayList<PointWithConstraints> currentPointList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                         point.setRouteId(current_route.getRouteId());
                         point.setPointLocation(latLng);
                         point.setPriority((int)ratingBar_priority.getRating());
-                        pointList.add(point);
+                        currentPointList.add(point);
                         if(spinnerDialog.isShowing())
                             spinnerDialog.dismiss();
                     }
@@ -117,16 +118,6 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
 
             }
         });
-    }
-
-    public void OptimizeRoute(View view) {
-
-        ProgressDialog progressDialog = new ProgressDialog(CreateRouteOnMapActivity.this);
-        progressDialog.setMessage("Rotanız Oluşturuluyor, bu işlem biraz uzun sürebilir");
-        progressDialog.create();
-        progressDialog.show();
-        SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(CreateRouteOnMapActivity.this);
-
     }
 
     @Override
@@ -165,9 +156,11 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         LayoutInflater inflater = CreateRouteOnMapActivity.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_route_settings, null);
         Button btn_save_route_settings = (Button) dialogView.findViewById(R.id.button_saveRouteSettings);
+        Button btn_cancel_route = (Button) dialogView.findViewById(R.id.button_cancel);
         final EditText editText_routeDatePicker = (EditText) dialogView.findViewById(R.id.editText_routeDate);
         GetDatePickerEvent(editText_routeDatePicker);
 
+        final EditText editText_routeName = (EditText) dialogView.findViewById(R.id.editText_routeName);
         final ImageButton imageButton_walk = (ImageButton) dialogView.findViewById(R.id.imageButton_walk);
         final ImageButton imageButton_car = (ImageButton) dialogView.findViewById(R.id.imageButton_car);
         final ImageButton imageButton_bus = (ImageButton) dialogView.findViewById(R.id.imageButton_bus);
@@ -205,9 +198,17 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                     editText_routeDatePicker.setError("Bu alan boş bırakılamaz");
                     return;
                 }
+                if(editText_routeName.getText().toString().length()==0){
+                    editText_routeName.setError("Bu alan boş bırakılamaz");
+                    return;
+                }
+
 
                 current_route = new Route();
+                //todo:Travel type should be selectable
+                current_route.setTravelType(AppConstants.travelType_walk);
                 current_route.setRouteId(UUID.randomUUID().toString());
+                current_route.setRouteName(editText_routeName.getText().toString());
                 current_route.setRouteDate(editText_routeDatePicker.getText().toString());
                 current_route.setUserId(PrefManager.getPref_UserInfo(PrefManager.key_userId, CreateRouteOnMapActivity.this));
                 if(routeSettingsDialog.isShowing()){
@@ -216,6 +217,16 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
             }
         });
 
+        btn_cancel_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(routeSettingsDialog.isShowing()) {
+                    routeSettingsDialog.dismiss();
+                finish();
+                startActivity(new Intent(CreateRouteOnMapActivity.this,AppMainActivity.class));
+                }
+            }
+        });
 
         routeSettingsDialog.setContentView(dialogView);
         routeSettingsDialog.setCancelable(false);
@@ -245,6 +256,19 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                 alertDialog.show();
             }
         });
+    }
+
+    public void OptimizeRoute(View view) {
+
+        ProgressDialog progressDialog = new ProgressDialog(CreateRouteOnMapActivity.this);
+        progressDialog.setMessage("Rotanız Oluşturuluyor, bu işlem biraz uzun sürebilir");
+        progressDialog.create();
+        progressDialog.show();
+        SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(CreateRouteOnMapActivity.this);
+        current_route.setPointList(currentPointList);
+        if(sqLiteDataProvider.insertRoute(current_route))
+            startActivity(new Intent(CreateRouteOnMapActivity.this,AppMainActivity.class));
+
     }
 
 }

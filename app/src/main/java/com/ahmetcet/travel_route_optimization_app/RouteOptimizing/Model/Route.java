@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Route {
     private String routeId;
     private String userId;
+    private String routeName;
     private ArrayList<PointWithConstraints> pointList;
     private String routeDate;
     private int travelType;
@@ -47,5 +48,13 @@ public class Route {
 
     public int getTravelType() {
         return travelType;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
+    }
+
+    public String getRouteName() {
+        return routeName;
     }
 }
