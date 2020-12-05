@@ -1,11 +1,15 @@
 package com.ahmetcet.travel_route_optimization_app;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,10 +59,15 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng my_loc = new LatLng(40.8238, 29.3718);
-        mMap.addMarker(new MarkerOptions().position(my_loc).title("Buradasınız"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(my_loc, cameraZoomLevel));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(CreateRouteOnMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(CreateRouteOnMapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mMap.setMyLocationEnabled(true);
+            }
+        }
+        else {
+            mMap.setMyLocationEnabled(true);
+        }
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
