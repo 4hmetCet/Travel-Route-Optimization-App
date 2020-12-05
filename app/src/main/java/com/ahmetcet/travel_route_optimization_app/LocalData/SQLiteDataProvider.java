@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -33,6 +34,12 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
     //endregion
 
     //region Routes
+
+    protected static final String table_Routes = "tb_Routes";
+    protected static final String column_R_RouteId = "ROUTE_ID";
+    protected static final String column_R_UserId = "USER_ID";
+    protected static final String column_R_RouteDate = "ROUTE_DATE";
+    protected static final String column_R_TravelType = "ROUTE_TRAVEL_TYPE";
 
     //endregion
 
@@ -60,12 +67,30 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
 
         }catch (Exception ex){
         }
+
+        try{
+            String query_create_TABLE_tbPOINTS = "CREATE TABLE " + table_Routes
+                    + "(" + column_R_RouteId + " TEXT,"
+                    + column_R_UserId + " TEXT,"
+                    + column_R_RouteDate + " TEXT,"
+                    + column_R_TravelType + " INT)";
+
+            db.execSQL(query_create_TABLE_tbPOINTS);
+
+        }catch (Exception ex){
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             db.execSQL("DROP TABLE IF EXISTS " + table_Points);
+            onCreate(db);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + table_Routes);
             onCreate(db);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,12 +110,21 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         }
     }
 
-    public void insertPointList(ArrayList<PointWithConstraints> pointWithConstraints) {
+    public void insertRoute(Route route) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
+            db.beginTransaction();
             Gson gson = new Gson();
+            if(route != null){
+                ContentValues values = new ContentValues();
+                values.put(column_R_RouteId, route.getRouteId());
+                values.put(column_R_UserId, route.getUserId());
+                values.put(column_R_RouteDate, route.getRouteDate());
+                values.put(column_R_TravelType, route.getTravelType());
+                db.insert(table_Routes, null, values);
+            }
             for (PointWithConstraints point:
-                 pointWithConstraints) {
+                 route.getPointList()) {
                 ContentValues values = new ContentValues();
                 values.put(column_P_RouteId, point.getRouteId());
                 values.put(column_P_PointId, point.getPointId());
@@ -161,6 +195,44 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         return resultList;
     }
 
+    public ArrayList<Route> getAllRoutes(Context context, String routeID) throws SQLException {
+        ArrayList<Route> resultList = new ArrayList<>();
+        Gson gson = new Gson();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            String query = "SELECT *  FROM " + table_Routes ;
+
+            Cursor cursor = db.rawQuery(query,null);
+            int routeIDOrdinal = cursor.getColumnIndex(column_R_RouteId);
+            int userIDOrdinal = cursor.getColumnIndex(column_R_UserId);
+            int routeDateOrdinal = cursor.getColumnIndex(column_R_RouteDate);
+            int travelTypeOrdinal = cursor.getColumnIndex(column_R_TravelType);
+
+
+            while (cursor.moveToNext()){
+                String routeId = cursor.getString(routeIDOrdinal);
+                String userId = cursor.getString(userIDOrdinal);
+                String routeDate = cursor.getString(routeDateOrdinal);
+                int travelType = cursor.getInt(travelTypeOrdinal);
+                Route route = new Route();
+                route.setRouteId(routeId);
+                route.setUserId(userId);
+                route.setRouteDate(routeDate);
+                route.setTravelType(travelType);
+
+                resultList.add(route);
+            }
+            cursor.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return resultList;
+    }
+
+
     public boolean UpdatePhotoStatus (String data) {
         try {
             SQLiteDatabase db = this.getReadableDatabase();
@@ -177,24 +249,6 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
             return  false;
         }
         return true;
-    }
-
-    public int getData(){
-        int result= 0;
-        try {
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            String query = "SELECT *  FROM " + table_Points ;
-
-            Cursor cursor = db.rawQuery(query,null);
-            result = cursor.getCount();
-            cursor.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return result;
-        }
-        return result;
     }
 
 

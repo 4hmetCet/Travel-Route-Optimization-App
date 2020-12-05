@@ -7,6 +7,7 @@ public class Route {
     private String userId;
     private ArrayList<PointWithConstraints> pointList;
     private String routeDate;
+    private int travelType;
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
@@ -38,5 +39,13 @@ public class Route {
 
     public String getRouteDate() {
         return routeDate;
+    }
+
+    public void setTravelType(int travelType) {
+        this.travelType = travelType;
+    }
+
+    public int getTravelType() {
+        return travelType;
     }
 }

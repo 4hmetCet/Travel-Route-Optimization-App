@@ -22,7 +22,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapActivity"
+            android:name=".CreateRouteOnMapActivity"
             android:label="@string/title_activity_map" />
         <activity
             android:name=".AppMainActivity"

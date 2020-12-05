@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         PrefManager.putPref_UserInfo(PrefManager.key_email,input_loginMail,this);
         PrefManager.putPref_UserInfo(PrefManager.key_password,input_loginPassword,this);
+        PrefManager.putPref_UserInfo(PrefManager.key_userId,"1",this);
 
         startActivity(new Intent(LoginActivity.this,AppMainActivity.class));
     }

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,7 +33,7 @@ public class AppMainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startActivity(new Intent(AppMainActivity.this,MapActivity.class));
+               startActivity(new Intent(AppMainActivity.this, CreateRouteOnMapActivity.class));
             }
         });
 
@@ -70,7 +68,7 @@ public class AppMainActivity extends AppCompatActivity {
         createRouteItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(AppMainActivity.this,MapActivity.class));
+                startActivity(new Intent(AppMainActivity.this, CreateRouteOnMapActivity.class));
                 return true;
             }
         });

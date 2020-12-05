@@ -22,9 +22,10 @@
         android:layout_height="60dp"
         android:layout_marginStart="24dp"
         android:scaleType="centerInside"
+        android:background="@color/ic_launcher_background"
         app:layout_constraintStart_toEndOf="@+id/imageButton_car"
         app:layout_constraintTop_toTopOf="@+id/imageButton_car"
-        app:srcCompat="@drawable/ic_bus" />
+        android:src="@drawable/ic_bus" />
 
     <ImageButton
         android:id="@+id/imageButton_car"
@@ -32,9 +33,10 @@
         android:layout_height="60dp"
         android:layout_marginStart="24dp"
         android:scaleType="centerInside"
+        android:background="@color/ic_launcher_background"
         app:layout_constraintStart_toEndOf="@+id/imageButton_walk"
         app:layout_constraintTop_toTopOf="@+id/imageButton_walk"
-        app:srcCompat="@drawable/ic_car" />
+        android:src="@drawable/ic_car" />
 
     <ImageButton
         android:id="@+id/imageButton_walk"
@@ -42,8 +44,44 @@
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerInside"
+        android:background="@color/ic_launcher_background"
         app:layout_constraintStart_toStartOf="@+id/textView_transType"
         app:layout_constraintTop_toBottomOf="@+id/textView_transType"
-        app:srcCompat="@drawable/ic_walk" />
+        android:src="@drawable/ic_walk" />
+
+    <TextView
+        android:id="@+id/textView_travelDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Yolculuk Tarihini Seçiniz"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView_transType"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton_car" />
+
+    <EditText
+        android:id="@+id/editText_routeDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="Tarih Seçiniz"
+        app:layout_constraintStart_toStartOf="@+id/textView_travelDate"
+        app:layout_constraintTop_toBottomOf="@+id/textView_travelDate" />
+
+    <Button
+        android:id="@+id/button_saveRouteSettings"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        android:background="@color/colorButton"
+        android:text="Kaydet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
