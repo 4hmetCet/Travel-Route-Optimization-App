@@ -71,6 +71,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView_relatedPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Bu Noktadan Önce Gitmek İstediğiniz Noktayı Seçebilirsiniz"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView_timeConstraints"
+        app:layout_constraintTop_toBottomOf="@+id/editText_earliestTime" />
+
+    <Spinner
+        android:id="@+id/spinner_relatedPoints"
+        android:layout_width="316dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/textView_relatedPoint"
+        app:layout_constraintTop_toBottomOf="@+id/textView_relatedPoint" />
+
     <Button
         android:id="@+id/button_setPoint"
         android:layout_width="wrap_content"

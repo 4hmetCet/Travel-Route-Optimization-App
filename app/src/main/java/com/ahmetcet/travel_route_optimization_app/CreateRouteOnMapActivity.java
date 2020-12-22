@@ -96,13 +96,24 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                 priorityList.add("Önemli");
                 priorityList.add("Normal");
                 priorityList.add("Öncelikli Değil");
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateRouteOnMapActivity.this, android.R.layout.simple_spinner_item,priorityList);
-                spin_priority.setAdapter(adapter);
+                ArrayAdapter<String> adapter_spinnerPriority = new ArrayAdapter<String>(CreateRouteOnMapActivity.this, android.R.layout.simple_spinner_item,priorityList);
+                spin_priority.setAdapter(adapter_spinnerPriority);
                 final EditText editText_earliestTimePicker = (EditText) dialogView.findViewById(R.id.editText_earliestTime);
                 GetTimePickerEvent(editText_earliestTimePicker);
 
                 final EditText editText_latestTimePicker = (EditText) dialogView.findViewById(R.id.editText_latestTime);
                 GetTimePickerEvent(editText_latestTimePicker);
+
+                final Spinner spin_relatedPoints = (Spinner) dialogView.findViewById(R.id.spinner_relatedPoints);
+
+                ArrayList<String> pointNameList = new ArrayList<>();
+                pointNameList.add("Seçiniz");
+                for (PointWithConstraints point :
+                        currentPointList) {
+                    pointNameList.add(point.getPointName());
+                }
+                ArrayAdapter<String> adapter_relatedPoints = new ArrayAdapter<String>(CreateRouteOnMapActivity.this, android.R.layout.simple_spinner_item,pointNameList);
+                spin_relatedPoints.setAdapter(adapter_relatedPoints);
 
 
                 button_setPoint.setOnClickListener(new View.OnClickListener() {
@@ -113,10 +124,19 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                             editText_pointName.setError("Konum ismi girmelisiniz");
                             return;
                         }
+                        for (PointWithConstraints item_point :
+                                currentPointList) {
+                            if(editText_pointName.getText().toString().equals(item_point.getPointName())){
+                                editText_pointName.setError("Aynı rota için ikinci kez aynı isimli nokta belirleyemezsiniz");
+                                return;
+                            }
 
-                        mMap.addMarker(new MarkerOptions().position(latLng)
+                        }
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(latLng)
                                 .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                 .title(editText_pointName.getText().toString())
                         );
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomLevel));
@@ -133,6 +153,16 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                             point.setPriority(1);
                         else
                             point.setPriority(0);
+
+                        if (!spin_relatedPoints.getSelectedItem().toString().equals("Seçiniz")) {
+                            for (PointWithConstraints item_point :
+                                    currentPointList) {
+                                if(item_point.getPointName().equals(spin_relatedPoints.getSelectedItem().toString())){
+                                    point.setPreviousPointId(item_point.getPointId());
+                                    break;
+                                }
+                            }
+                        }
 
                         currentPointList.add(point);
                         if(spinnerDialog.isShowing())
