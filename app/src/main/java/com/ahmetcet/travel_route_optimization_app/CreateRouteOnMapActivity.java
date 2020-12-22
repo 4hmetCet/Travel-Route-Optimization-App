@@ -13,11 +13,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
@@ -52,6 +53,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         OpenRouteSettingsDialog();
     }
 
@@ -68,6 +70,10 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         else {
             mMap.setMyLocationEnabled(true);
         }
+        mMap.setTrafficEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().isCompassEnabled();
+        mMap.setBuildingsEnabled(true);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -81,11 +87,17 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
 
                 LayoutInflater inflater = CreateRouteOnMapActivity.this.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialog_point_constraints, null);
-                final RatingBar ratingBar_priority = (RatingBar) dialogView.findViewById(R.id.ratingBar_priority);
-                ratingBar_priority.setNumStars(5);
-                ratingBar_priority.setStepSize(1f);
+
                 Button button_setPoint = (Button) dialogView.findViewById(R.id.button_setPoint);
                 final EditText editText_pointName = (EditText) dialogView.findViewById(R.id.editText_pointExplanation);
+                final Spinner spin_priority = (Spinner) dialogView.findViewById(R.id.spinner_priority);
+                ArrayList<String> priorityList = new ArrayList<>();
+                priorityList.add("Seçiniz");
+                priorityList.add("Önemli");
+                priorityList.add("Normal");
+                priorityList.add("Öncelikli Değil");
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateRouteOnMapActivity.this, android.R.layout.simple_spinner_item,priorityList);
+                spin_priority.setAdapter(adapter);
                 final EditText editText_earliestTimePicker = (EditText) dialogView.findViewById(R.id.editText_earliestTime);
                 GetTimePickerEvent(editText_earliestTimePicker);
 
@@ -113,7 +125,15 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                         point.setPointId(UUID.randomUUID().toString());
                         point.setRouteId(current_route.getRouteId());
                         point.setPointLocation(latLng);
-                        point.setPriority((int)ratingBar_priority.getRating());
+                        if(spin_priority.getSelectedItem().toString().equals("Önemli"))
+                            point.setPriority(3);
+                        else if (spin_priority.getSelectedItem().toString().equals("Normal"))
+                            point.setPriority(2);
+                        else if (spin_priority.getSelectedItem().toString().equals("Öncelikli Değil"))
+                            point.setPriority(1);
+                        else
+                            point.setPriority(0);
+
                         currentPointList.add(point);
                         if(spinnerDialog.isShowing())
                             spinnerDialog.dismiss();
@@ -123,7 +143,6 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                 spinnerDialog.setContentView(dialogView);
                 spinnerDialog.setCancelable(true);
                 spinnerDialog.getWindow().setLayout(1000,1400);
-                //spinnerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 spinnerDialog.show();
 
             }

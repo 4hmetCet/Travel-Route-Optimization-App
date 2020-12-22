@@ -68,6 +68,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             map.setMyLocationEnabled(true);
         }
 
+        map.setTrafficEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().isCompassEnabled();
+        map.setBuildingsEnabled(true);
+
         //map.addMarker(new MarkerOptions().position(/*some location*/));
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(/*some location*/, 10));
     }
