@@ -153,7 +153,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
         try {
             SQLiteDatabase db = this.getReadableDatabase();
 
-            String query = "SELECT * FROM " + table_Points + " WHERE " + column_P_RouteId + " IS " + routeID;
+            String query = "SELECT * FROM " + table_Points;
 
             Cursor cursor = db.rawQuery(query,null);
             int routeIDOrdinal = cursor.getColumnIndex(column_P_RouteId);
@@ -186,7 +186,7 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
                 point.setEarliestTime(earliestTime);
                 point.setLatestTime(latestTime);
                 point.setPreviousPointId(previousPointId);
-
+                if(point.getRouteId().equals(routeID))
                 resultList.add(point);
             }
             cursor.close();

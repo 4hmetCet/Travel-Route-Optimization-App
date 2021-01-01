@@ -63,7 +63,7 @@ public class MyRoutesFragment extends Fragment {
     }
 
     public void OpenPointListDialog(final String selectedRouteId){
-        final Dialog routeSettingsDialog = new Dialog(getContext());
+        final Dialog pointListDialog = new Dialog(getContext());
 
 
         LayoutInflater inflater = MyRoutesFragment.this.getLayoutInflater();
@@ -74,9 +74,9 @@ public class MyRoutesFragment extends Fragment {
 
         pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),selectedRouteId);
 
-        //ListView pointListView = (ListView)dialogView.findViewById(R.id.pointList);
-        //PointListAdapter listAdapter = new PointListAdapter(getContext(), R.layout.points_list_item, pointList);
-        //pointListView .setAdapter(listAdapter);
+        ListView pointListView = (ListView)dialogView.findViewById(R.id.pointList);
+        PointListAdapter listAdapter = new PointListAdapter(getContext(), R.layout.points_list_item, pointList);
+        pointListView.setAdapter(listAdapter);
 
 
         btn_use_route.setOnClickListener(new View.OnClickListener() {
@@ -88,11 +88,11 @@ public class MyRoutesFragment extends Fragment {
             }
         });
 
-        routeSettingsDialog.setContentView(dialogView);
-        routeSettingsDialog.setCancelable(true);
-        routeSettingsDialog.getWindow().setLayout(1000,1400);
+        pointListDialog.setContentView(dialogView);
+        pointListDialog.setCancelable(true);
+        pointListDialog.getWindow().setLayout(1000,1400);
         //spinnerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        routeSettingsDialog.show();
+        pointListDialog.show();
 
     }
 

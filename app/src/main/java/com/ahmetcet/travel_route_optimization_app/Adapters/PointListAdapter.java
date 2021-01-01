@@ -1,5 +1,6 @@
 package com.ahmetcet.travel_route_optimization_app.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class PointListAdapter extends ArrayAdapter<PointWithConstraints> {
         this.mContext = context;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -38,10 +40,10 @@ public class PointListAdapter extends ArrayAdapter<PointWithConstraints> {
         PointWithConstraints point = getItem(position);
 
         if (point != null) {
-            TextView tv_routeName = (TextView) v.findViewById(R.id.textView_itemPointOrder);
-            tv_routeName.setText(point.getOrder());
-            TextView tv_routeDate = (TextView) v.findViewById(R.id.textView_itemPointName);
-            tv_routeDate.setText(point.getPointName());
+            TextView tv_pointOrder = (TextView) v.findViewById(R.id.textView_itemPointOrder);
+            tv_pointOrder.setText(Integer.toString(point.getOrder()));
+            TextView tv_pointName = (TextView) v.findViewById(R.id.textView_itemPointName);
+            tv_pointName.setText(point.getPointName());
 
         }
 
