@@ -30,10 +30,17 @@ public class MyRoutesFragment extends Fragment {
 
     private ArrayList<Route> routes= new ArrayList<>();
     private ArrayList<PointWithConstraints> pointList;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_my_routes, container, false);
+        root = inflater.inflate(R.layout.fragment_my_routes, container, false);
+        setRoutesData();
+
+        return root;
+    }
+
+    public void setRoutesData(){
         SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
         routes = sqLiteDataProvider.getAllRoutes();
         if(routes.size()==0)
@@ -47,19 +54,10 @@ public class MyRoutesFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final Route selectedRoute = routes.get(position);
                     OpenPointListDialog(selectedRoute.getRouteId());
-                    /*Intent intent = new Intent(getContext(), SelectedRouteFragment.class);
-                    Bundle b = new Bundle();
-                    b.putString("routeId", selectedRoute.getRouteId()); //Your id
-                    intent.putExtras(b); //Put your id to your next Intent
-                    startActivity(intent);
-                    */
-
                 }
             });
         }
 
-
-        return root;
     }
 
     public void OpenPointListDialog(final String selectedRouteId){
@@ -69,8 +67,9 @@ public class MyRoutesFragment extends Fragment {
         LayoutInflater inflater = MyRoutesFragment.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.selected_route_points_dialog, null);
         Button btn_use_route = (Button) dialogView.findViewById(R.id.btn_useRoute);
+        Button btn_delete_route = (Button) dialogView.findViewById(R.id.btn_deleteRoute);
 
-        SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
+        final SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
 
         pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),selectedRouteId);
 
@@ -84,6 +83,16 @@ public class MyRoutesFragment extends Fragment {
             public void onClick(View v) {
                 PrefManager.setCurrentRouteId(selectedRouteId,getContext());
                 startActivity(new Intent(getContext(), AppMainActivity.class));
+
+            }
+        });
+
+        btn_delete_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqLiteDataProvider.deleteRouteData(selectedRouteId);
+                pointListDialog.dismiss();
+                setRoutesData();
 
             }
         });

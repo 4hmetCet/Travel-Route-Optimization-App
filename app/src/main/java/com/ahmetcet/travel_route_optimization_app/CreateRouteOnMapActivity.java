@@ -78,9 +78,6 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(final LatLng latLng) {
-                //Intent myIntent = new Intent(view.getContext(), agones.class);
-                //startActivityForResult(myIntent, 0);
-
 
                 final Dialog spinnerDialog = new Dialog(CreateRouteOnMapActivity.this);
 
@@ -135,8 +132,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
 
                         mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .icon(BitmapDescriptorFactory
-                                .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                                 .title(editText_pointName.getText().toString())
                         );
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomLevel));

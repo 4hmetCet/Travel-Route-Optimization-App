@@ -2,6 +2,7 @@ package com.ahmetcet.travel_route_optimization_app.ui.home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -19,7 +20,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
+import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
 import com.ahmetcet.travel_route_optimization_app.R;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,12 +39,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback, LocationListener{
 
     private GoogleMap map;
     private SupportMapFragment mapView;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+    private ArrayList<PointWithConstraints> pointList;
+    private String currRouteId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,8 +81,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         map.getUiSettings().isCompassEnabled();
         map.setBuildingsEnabled(true);
 
-        //map.addMarker(new MarkerOptions().position(/*some location*/));
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(/*some location*/, 10));
+        try {
+            currRouteId = PrefManager.getCurrentRouteId(getContext());
+            SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
+
+            pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),currRouteId);
+
+            for (PointWithConstraints point :
+                    pointList) {
+                map.addMarker(new MarkerOptions().position(point.getPointLocation()).title(point.getPointName()));
+            }
+        } catch (SQLException e) {
+
+        }
+
     }
 
     @Override

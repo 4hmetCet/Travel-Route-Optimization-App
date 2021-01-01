@@ -102,8 +102,23 @@ public class SQLiteDataProvider extends SQLiteOpenHelper {
     public boolean deleteRouteData(String routeID){
         try{
             SQLiteDatabase db = this.getWritableDatabase();
-            String query = "DELETE FROM " + table_Points + " WHERE " + column_P_RouteId + " IS " + routeID;
-            db.execSQL(query);
+            db.delete(table_Routes,
+                    column_R_RouteId + " = ? ",
+                    new String[] {routeID+""});
+            db.close();
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deletePointsData(String routeID){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(table_Points,
+                    column_P_RouteId + " = ? ",
+                    new String[] {routeID+""});
             db.close();
             return true;
 
