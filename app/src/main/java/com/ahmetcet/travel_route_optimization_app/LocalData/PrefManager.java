@@ -12,6 +12,9 @@ public class PrefManager {
     final public static String key_surname="surname";
     final public static String key_userId="userId";
 
+    final public static String currentRouteId="currentRoute";
+
+
 
     //Key - Value user ınfoya kaydeder.
     public static void putPref_UserInfo(String key, String value, Context context) {
@@ -48,6 +51,18 @@ public class PrefManager {
         }catch(Exception ex){
 
         }
+    }
+
+    public static void setCurrentRouteId(String value,Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(userInfo, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(currentRouteId, value);
+        editor.commit();
+    }
+    //Key - Value user ınfodan okur.
+    public static String getCurrentRouteId(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(userInfo, Context.MODE_PRIVATE);
+        return preferences.getString(currentRouteId, "");
     }
 
 }

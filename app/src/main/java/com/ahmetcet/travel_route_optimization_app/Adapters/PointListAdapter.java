@@ -8,16 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ahmetcet.travel_route_optimization_app.R;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
 
 import java.util.ArrayList;
 
-public class MyRoutesListAdapter extends ArrayAdapter<Route> {
+public class PointListAdapter extends ArrayAdapter<PointWithConstraints> {
 
     private int resourceLayout;
     private Context mContext;
 
-    public MyRoutesListAdapter(Context context, int resource, ArrayList<Route> items) {
+    public PointListAdapter(Context context, int resource, ArrayList<PointWithConstraints> items) {
         super(context, resource, items);
         this.resourceLayout = resource;
         this.mContext = context;
@@ -34,13 +35,13 @@ public class MyRoutesListAdapter extends ArrayAdapter<Route> {
             v = vi.inflate(resourceLayout, null);
         }
 
-        Route route = getItem(position);
+        PointWithConstraints point = getItem(position);
 
-        if (route != null) {
-            TextView tv_routeName = (TextView) v.findViewById(R.id.textView_itemRouteName);
-            tv_routeName.setText(route.getRouteName());
-            TextView tv_routeDate = (TextView) v.findViewById(R.id.textView_itemRouteDate);
-            tv_routeDate.setText(route.getRouteDate());
+        if (point != null) {
+            TextView tv_routeName = (TextView) v.findViewById(R.id.textView_itemPointOrder);
+            tv_routeName.setText(point.getOrder());
+            TextView tv_routeDate = (TextView) v.findViewById(R.id.textView_itemPointName);
+            tv_routeDate.setText(point.getPointName());
 
         }
 
