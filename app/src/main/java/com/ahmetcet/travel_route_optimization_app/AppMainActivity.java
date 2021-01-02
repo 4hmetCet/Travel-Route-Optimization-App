@@ -2,6 +2,7 @@ package com.ahmetcet.travel_route_optimization_app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 public class AppMainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private String currRouteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,42 @@ public class AppMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        currRouteId = PrefManager.getCurrentRouteId(AppMainActivity.this);
+
+        final FloatingActionButton fab_createRoute = findViewById(R.id.fab_createRoute);
+        fab_createRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               startActivity(new Intent(AppMainActivity.this, CreateRouteOnMapActivity.class));
+                startActivity(new Intent(AppMainActivity.this, CreateRouteOnMapActivity.class));
             }
         });
+
+        final FloatingActionButton fab_cancelRoute = findViewById(R.id.fab_cancelRoute);
+        fab_cancelRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Tools.ShowAlertDialog(AppMainActivity.this, "Rotayı iptal etmek istediğinize emin misiniz?",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PrefManager.setCurrentRouteId("",AppMainActivity.this);
+                                startActivity(new Intent(AppMainActivity.this,AppMainActivity.class));
+                            }
+                        },true);
+                return ;
+            }
+        });
+
+        if(currRouteId.length()>0){
+            fab_createRoute.setVisibility(View.INVISIBLE);
+            fab_cancelRoute.setVisibility(View.VISIBLE);
+        }else{
+            fab_createRoute.setVisibility(View.VISIBLE);
+            fab_cancelRoute.setVisibility(View.INVISIBLE);
+        }
+
+
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -48,6 +79,8 @@ public class AppMainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
         MenuItem logOutItem = navigationView.getMenu().findItem(R.id.nav_logOut);
         logOutItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

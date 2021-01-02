@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
     Marker mCurrLocationMarker;
     private ArrayList<PointWithConstraints> pointList;
     private String currRouteId;
+    private Button btn_nextPoint;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +60,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this); //this is important
+
+        btn_nextPoint = (Button) root.findViewById(R.id.btn_nextPoint);
+        btn_nextPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (PointWithConstraints point:
+                        pointList) {
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(point.getPointLocation(),18));
+
+                }
+            }
+        });
 
         return root;
     }
@@ -86,7 +100,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
 
             pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),currRouteId);
-
+            if(pointList == null || pointList.size() == 0){
+                btn_nextPoint.setVisibility(View.INVISIBLE);
+            }
             for (PointWithConstraints point :
                     pointList) {
                 map.addMarker(new MarkerOptions().position(point.getPointLocation()).title(point.getPointName()));
@@ -152,5 +168,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             }
         }
     }
+
 
 }

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
@@ -79,6 +80,11 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
             @Override
             public void onMapLongClick(final LatLng latLng) {
 
+                if(currentPointList.size() >= 16){
+                    Toast.makeText(CreateRouteOnMapActivity.this,"Bir rota için en fazla 16 tane nokta seçebilirsiniz",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 final Dialog spinnerDialog = new Dialog(CreateRouteOnMapActivity.this);
 
 
@@ -129,6 +135,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                             }
 
                         }
+
 
                         mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
