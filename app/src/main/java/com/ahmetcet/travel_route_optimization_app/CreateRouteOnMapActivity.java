@@ -329,7 +329,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
         SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(CreateRouteOnMapActivity.this);
         current_route.setPointList(currentPointList);
         Optimize optimize = new Optimize(CreateRouteOnMapActivity.this,current_route);
-        Route optimizedRoute = optimize.GetOptimizedRoute();
+        Route optimizedRoute = optimize.GetOptimizedRoute(null);
         if(sqLiteDataProvider.insertRoute(optimizedRoute))
             startActivity(new Intent(CreateRouteOnMapActivity.this,AppMainActivity.class));
 
