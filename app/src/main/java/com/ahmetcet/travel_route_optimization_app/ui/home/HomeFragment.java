@@ -3,6 +3,10 @@ package com.ahmetcet.travel_route_optimization_app.ui.home;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -105,7 +109,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             }
             for (PointWithConstraints point :
                     pointList) {
-                map.addMarker(new MarkerOptions().position(point.getPointLocation()).title(point.getPointName()));
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
+                Canvas canvas = new Canvas(bmp);
+                Paint tPaint = new Paint();
+                tPaint.setTextSize(35);
+                tPaint.setColor(Color.BLUE);
+                tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+                canvas.drawText(String.valueOf(point.getOrder()), 100, 50, tPaint); // paint defines the text color, stroke width, size
+
+
+
+                map.addMarker(new MarkerOptions().position(point.getPointLocation())
+                        .title(point.getPointName())
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1)
+                );
             }
         } catch (SQLException e) {
 
