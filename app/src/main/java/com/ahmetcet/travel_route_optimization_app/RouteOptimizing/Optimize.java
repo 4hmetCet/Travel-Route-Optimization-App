@@ -45,7 +45,7 @@ public class Optimize {
         return orderedPoints;
     }
 
-    private ArrayList<PointWithConstraints> OrderPointsByCurrentLocation(ArrayList<PointWithConstraints> points, LatLng currentLocation){
+    public ArrayList<PointWithConstraints> OrderPointsByCurrentLocation(ArrayList<PointWithConstraints> points, LatLng currentLocation){
         ArrayList<PointWithConstraints> orderedPoints = new ArrayList<>();
 
         for (PointWithConstraints point:
@@ -53,14 +53,18 @@ public class Optimize {
             point.setOrder(0);
         }
 
-
-        getNearestPointToDest(currentLocation,points).setOrder(1);
+        PointWithConstraints tempPoint =  getNearestPointToDest(currentLocation,points);
+        tempPoint.setOrder(1);
+        orderedPoints.add(tempPoint);
         int i = 2;
-        for (PointWithConstraints point:
-                points) {
-            point.setOrder(i);
-            orderedPoints.add(point);
-            i++;
+
+        for(int k = 0; k< points.size(); k++){
+            tempPoint = getNearestPointToDest(tempPoint.getPointLocation(),points);
+            if(tempPoint == null)
+                break;
+            tempPoint.setOrder(i);
+            orderedPoints.add(tempPoint);
+            i ++;
         }
 
         return orderedPoints;
@@ -82,12 +86,12 @@ public class Optimize {
     }
 
     private PointWithConstraints getNearestPointToDest(LatLng dest, ArrayList<PointWithConstraints> pointList){
-        float minDist = Float.MAX_VALUE;
-        PointWithConstraints temp_point = new PointWithConstraints();
+        float minDist = 9999999999f;
+        PointWithConstraints temp_point = null;
         for (PointWithConstraints point:
                 pointList) {
             float dist = getDistanceBetweenLocations(dest,point.getPointLocation());
-            if(dist< minDist){
+            if(dist< minDist && point.getOrder() == 0){
                 minDist = dist;
                 temp_point = point;
             }

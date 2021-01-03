@@ -29,6 +29,8 @@ import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
 import com.ahmetcet.travel_route_optimization_app.R;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Optimize;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
     private ArrayList<PointWithConstraints> pointList;
     private String currRouteId;
     private Button btn_nextPoint;
+    private SQLiteDataProvider sqLiteDataProvider;
+    private Optimize optimize;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +80,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
                 }
             }
         });
+        sqLiteDataProvider = new SQLiteDataProvider(getContext());
+        currRouteId = PrefManager.getCurrentRouteId(getContext());
+        optimize = new Optimize(getContext(),new Route());
+        pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),currRouteId);
 
         return root;
     }
@@ -99,37 +107,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         map.getUiSettings().isCompassEnabled();
         map.setBuildingsEnabled(true);
 
-        try {
-            currRouteId = PrefManager.getCurrentRouteId(getContext());
-            SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
 
-            pointList = sqLiteDataProvider.getPointListByRouteId(getContext(),currRouteId);
-            if(pointList == null || pointList.size() == 0){
-                btn_nextPoint.setVisibility(View.INVISIBLE);
-            }
-            for (PointWithConstraints point :
-                    pointList) {
-                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
-                Canvas canvas = new Canvas(bmp);
-                Paint tPaint = new Paint();
-                tPaint.setTextSize(35);
-                tPaint.setColor(Color.BLUE);
-                tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        pointList = optimize.OrderPointsByCurrentLocation(pointList,new LatLng(38.5043,27.7045));
+        mapRoute();
 
-                canvas.drawText(String.valueOf(point.getOrder()), 100, 50, tPaint); // paint defines the text color, stroke width, size
-
-
-
-                map.addMarker(new MarkerOptions().position(point.getPointLocation())
-                        .title(point.getPointName())
-                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .anchor(0.5f, 1)
-                );
-            }
-        } catch (SQLException e) {
-
-        }
 
     }
 
@@ -171,6 +152,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),18));
 
+
+
+
+
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -186,6 +171,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
                 }
                 return;
             }
+        }
+    }
+
+    private void mapRoute(){
+        try {
+            if(pointList == null || pointList.size() == 0){
+                btn_nextPoint.setVisibility(View.INVISIBLE);
+            }
+            for (PointWithConstraints point :
+                    pointList) {
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
+                Canvas canvas = new Canvas(bmp);
+                Paint tPaint = new Paint();
+                tPaint.setTextSize(35);
+                tPaint.setColor(Color.BLUE);
+                tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+                canvas.drawText(String.valueOf(point.getOrder()), 100, 50, tPaint); // paint defines the text color, stroke width, size
+
+
+
+                map.addMarker(new MarkerOptions().position(point.getPointLocation())
+                        .title(point.getPointName())
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1)
+                );
+            }
+        } catch (SQLException e) {
+
         }
     }
 
