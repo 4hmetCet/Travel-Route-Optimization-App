@@ -1,12 +1,14 @@
 package com.ahmetcet.travel_route_optimization_app.ui.home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -41,6 +44,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -184,27 +188,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             }
             for (PointWithConstraints point :
                     pointList) {
-                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
-                Canvas canvas = new Canvas(bmp);
-                Paint tPaint = new Paint();
-                tPaint.setTextSize(35);
-                tPaint.setColor(Color.BLUE);
-                tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-                canvas.drawText(String.valueOf(point.getOrder()), 100, 50, tPaint); // paint defines the text color, stroke width, size
-
-
 
                 map.addMarker(new MarkerOptions().position(point.getPointLocation())
                         .title(point.getPointName())
-                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        //.icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_point_marker,String.valueOf(point.getOrder())))
                         .anchor(0.5f, 1)
                 );
             }
         } catch (SQLException e) {
 
         }
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId, String order) {
+        //Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        //background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() , vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth()+30, vectorDrawable.getIntrinsicHeight()+20, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint tPaint = new Paint();
+        tPaint.setTextSize(45);
+        tPaint.setColor(Color.BLUE);
+        tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        canvas.drawText(order, 110, 60, tPaint); // paint defines the text color, stroke width, size
+
+        //background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 
