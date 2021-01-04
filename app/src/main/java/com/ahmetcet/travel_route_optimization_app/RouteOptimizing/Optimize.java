@@ -3,13 +3,11 @@ package com.ahmetcet.travel_route_optimization_app.RouteOptimizing;
 import android.content.Context;
 import android.location.Location;
 
-import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Optimize {
     private Context context;
@@ -53,13 +51,13 @@ public class Optimize {
             point.setOrder(0);
         }
 
-        PointWithConstraints tempPoint =  getNearestPointToDest(currentLocation,points);
+        PointWithConstraints tempPoint =  getUnvisitedNearestPointToDest(currentLocation,points);
         tempPoint.setOrder(1);
         orderedPoints.add(tempPoint);
         int i = 2;
 
         for(int k = 0; k< points.size(); k++){
-            tempPoint = getNearestPointToDest(tempPoint.getPointLocation(),points);
+            tempPoint = getUnvisitedNearestPointToDest(tempPoint.getPointLocation(),points);
             if(tempPoint == null)
                 break;
             tempPoint.setOrder(i);
@@ -85,7 +83,12 @@ public class Optimize {
         return distance;
     }
 
-    private PointWithConstraints getNearestPointToDest(LatLng dest, ArrayList<PointWithConstraints> pointList){
+    private boolean isTimeIntervalSuitable(PointWithConstraints targetPoint){
+
+        return true;
+    }
+
+    private PointWithConstraints getUnvisitedNearestPointToDest(LatLng dest, ArrayList<PointWithConstraints> pointList){
         float minDist = 9999999999f;
         PointWithConstraints temp_point = null;
         for (PointWithConstraints point:

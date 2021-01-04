@@ -1,6 +1,8 @@
 package com.ahmetcet.travel_route_optimization_app.ui.myRoutes;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
 import com.ahmetcet.travel_route_optimization_app.R;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
+import com.ahmetcet.travel_route_optimization_app.Tools;
 
 import java.util.ArrayList;
 
@@ -67,7 +71,8 @@ public class MyRoutesFragment extends Fragment {
         LayoutInflater inflater = MyRoutesFragment.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.selected_route_points_dialog, null);
         Button btn_use_route = (Button) dialogView.findViewById(R.id.btn_useRoute);
-        Button btn_delete_route = (Button) dialogView.findViewById(R.id.btn_deleteRoute);
+        ImageButton btn_delete_route = (ImageButton) dialogView.findViewById(R.id.btn_deleteRoute);
+        ImageButton btn_share_route = (ImageButton) dialogView.findViewById(R.id.btn_share);
 
         final SQLiteDataProvider sqLiteDataProvider = new SQLiteDataProvider(getContext());
 
@@ -94,6 +99,22 @@ public class MyRoutesFragment extends Fragment {
                 pointListDialog.dismiss();
                 setRoutesData();
 
+            }
+        });
+
+        btn_share_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tools.ShowAlertDialog(getContext(),"Rotanızı diğer kullanıcılar ile paylaşmak istediğinize emin misiniz?",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                               ProgressDialog progressDialog = new ProgressDialog(getContext());
+                               progressDialog.setMessage("Rotanız paylaşılıyor, lütfen bekleyiniz...");
+                               progressDialog.setCancelable(true);
+                               progressDialog.show();
+                            }
+                        },true);
             }
         });
 
