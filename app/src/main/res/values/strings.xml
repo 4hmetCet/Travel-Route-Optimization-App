@@ -10,6 +10,7 @@
 
     <string name="menu_home">Anasayfa</string>
     <string name="menu_myRoutes">Rotalarım</string>
+    <string name="menu_searchRoutes">Rota Bul</string>
     <string name="menu_offlineMap">Çevrimdışı Harita</string>
     <string name="menu_createRoute">Rota Oluştur</string>
     <!-- TODO: Remove or change this placeholder text -->

@@ -22,4 +22,10 @@
         android:name="com.ahmetcet.travel_route_optimization_app.ui.offlineMap.OfflineMapFragment"
         android:label="@string/menu_offlineMap"
         tools:layout="@layout/fragment_offline_map" />
+
+    <fragment
+        android:id="@+id/nav_searchRoute"
+        android:name="com.ahmetcet.travel_route_optimization_app.ui.searchRoutes.SearchRouteFragment"
+        android:label="@string/menu_searchRoutes"
+        tools:layout="@layout/fragment_search_route" />
 </navigation>

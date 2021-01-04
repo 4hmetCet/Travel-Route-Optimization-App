@@ -19,6 +19,11 @@
             android:title="@string/menu_myRoutes" />
 
         <item
+            android:id="@+id/nav_searchRoute"
+            android:icon="@drawable/ic_search_location"
+            android:title="@string/menu_searchRoutes" />
+
+        <item
             android:id="@+id/nav_offlineMap"
             android:icon="@drawable/ic_no_wifi"
             android:title="@string/menu_offlineMap" />

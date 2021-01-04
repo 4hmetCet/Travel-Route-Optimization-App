@@ -184,8 +184,8 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
+        finish();
+        startActivity(new Intent(CreateRouteOnMapActivity.this,AppMainActivity.class));
     }
 
     public void GetTimePickerEvent(final EditText editText_timePicker){

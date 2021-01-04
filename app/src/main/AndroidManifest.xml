@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".SignupActivity"></activity>
 
         <meta-data
@@ -23,7 +24,8 @@
 
         <activity
             android:name=".CreateRouteOnMapActivity"
-            android:label="@string/title_activity_map" />
+            android:label="@string/title_activity_map"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".AppMainActivity"
             android:label="@string/title_activity_app_main"
