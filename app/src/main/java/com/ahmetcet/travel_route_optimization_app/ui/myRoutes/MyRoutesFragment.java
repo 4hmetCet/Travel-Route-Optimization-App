@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +28,12 @@ import com.ahmetcet.travel_route_optimization_app.R;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
 import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
 import com.ahmetcet.travel_route_optimization_app.Tools;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MyRoutesFragment extends Fragment {
 
@@ -69,7 +75,7 @@ public class MyRoutesFragment extends Fragment {
 
 
         LayoutInflater inflater = MyRoutesFragment.this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.selected_route_points_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.selected_route_points_dialog, null);
         Button btn_use_route = (Button) dialogView.findViewById(R.id.btn_useRoute);
         ImageButton btn_delete_route = (ImageButton) dialogView.findViewById(R.id.btn_deleteRoute);
         ImageButton btn_share_route = (ImageButton) dialogView.findViewById(R.id.btn_share);
@@ -81,6 +87,22 @@ public class MyRoutesFragment extends Fragment {
         ListView pointListView = (ListView)dialogView.findViewById(R.id.pointList);
         PointListAdapter listAdapter = new PointListAdapter(getContext(), R.layout.points_list_item, pointList);
         pointListView.setAdapter(listAdapter);
+        pointListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Geocoder geocoder;
+                List<Address> addresses = null;
+                geocoder = new Geocoder(getContext(), Locale.getDefault());
+                PointWithConstraints selectedPoint = pointList.get(position);
+                try {
+                    addresses = geocoder.getFromLocation(selectedPoint.getPointLocation().latitude, selectedPoint.getPointLocation().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(addresses != null && addresses.size()>0)
+                    Snackbar.make(view,addresses.get(0).getAddressLine(0),Snackbar.LENGTH_LONG).show();
+            }
+        });
 
 
         btn_use_route.setOnClickListener(new View.OnClickListener() {
