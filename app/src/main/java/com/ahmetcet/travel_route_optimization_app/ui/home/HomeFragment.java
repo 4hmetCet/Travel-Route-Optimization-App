@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
@@ -60,9 +61,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
     Marker mCurrLocationMarker;
     private ArrayList<PointWithConstraints> pointList;
     private String currRouteId;
-    private Button btn_nextPoint;
+    private ImageButton btn_nextPoint;
     private SQLiteDataProvider sqLiteDataProvider;
     private Optimize optimize;
+    private PointWithConstraints nextPoint = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,15 +75,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
 
         mapView.getMapAsync(this); //this is important
 
-        btn_nextPoint = (Button) root.findViewById(R.id.btn_nextPoint);
+        btn_nextPoint = (ImageButton) root.findViewById(R.id.btn_nextPoint);
         btn_nextPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (PointWithConstraints point:
-                        pointList) {
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(point.getPointLocation(),18));
-
-                }
+                if(nextPoint != null)
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(nextPoint.getPointLocation(),18));
             }
         });
         sqLiteDataProvider = new SQLiteDataProvider(getContext());
@@ -188,13 +187,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
             }
             for (PointWithConstraints point :
                     pointList) {
-
-                map.addMarker(new MarkerOptions().position(point.getPointLocation())
-                        .title(point.getPointName())
-                        //.icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_point_marker,String.valueOf(point.getOrder())))
-                        .anchor(0.5f, 1)
-                );
+                if(point.getOrder() == 1){
+                    nextPoint = point;
+                    map.addMarker(new MarkerOptions().position(point.getPointLocation())
+                            .title(point.getPointName())
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_target_point_marker,String.valueOf(point.getOrder())))
+                            .anchor(0.5f, 1)
+                    );
+                }else{
+                    map.addMarker(new MarkerOptions().position(point.getPointLocation())
+                            .title(point.getPointName())
+                            //.icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_point_marker,String.valueOf(point.getOrder())))
+                            .anchor(0.5f, 1)
+                    );
+                }
             }
         } catch (SQLException e) {
 
