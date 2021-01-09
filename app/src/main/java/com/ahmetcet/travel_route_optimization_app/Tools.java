@@ -18,7 +18,18 @@ public class Tools {
     }
 
     public static void ShowAlertDialog(Context context, String message, boolean isCancelable){
-
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Uyarı")
+                .setMessage(message)
+                .setCancelable(isCancelable)
+                .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public static void ShowAlertDialog(Context context, String message, DialogInterface.OnClickListener positiveButtonEvent, boolean isCancelable){
