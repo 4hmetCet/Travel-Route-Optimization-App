@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         tPaint.setColor(Color.BLUE);
         tPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        canvas.drawText(order, 110, 60, tPaint); // paint defines the text color, stroke width, size
+        canvas.drawText(order, 130, 60, tPaint); // paint defines the text color, stroke width, size
 
         //background.draw(canvas);
         vectorDrawable.draw(canvas);

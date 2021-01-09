@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(LoginActivity.this,AppMainActivity.class));
     }
 
-    public void SignUp(View view) {
+    public void GotoSignUpPage(View view) {
         startActivity(new Intent(LoginActivity.this, SignupActivity.class));
     }
 }

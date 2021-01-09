@@ -6,4 +6,107 @@
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
 
+    <TextView
+        android:id="@+id/textView_nameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="Ad Soyad"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_nameSurname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Adınızı ve soyadınızı giriniz"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView_nameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textView_nameLabel" />
+
+    <TextView
+        android:id="@+id/textView_labelEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Eposta"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editText_nameSurname"
+        app:layout_constraintTop_toBottomOf="@+id/editText_nameSurname" />
+
+    <EditText
+        android:id="@+id/editText_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Epostanızı giriniz"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/editText_nameSurname"
+        app:layout_constraintStart_toStartOf="@+id/textView_labelEmail"
+        app:layout_constraintTop_toBottomOf="@+id/textView_labelEmail" />
+
+    <TextView
+        android:id="@+id/textView_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Şifre"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editText_email"
+        app:layout_constraintTop_toBottomOf="@+id/editText_email" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Şifrenizi giriniz"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editText_email"
+        app:layout_constraintStart_toStartOf="@+id/textView_password"
+        app:layout_constraintTop_toBottomOf="@+id/textView_password" />
+
+    <TextView
+        android:id="@+id/textView_labelPasswordVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Şifre (Tekrar)"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+
+    <EditText
+        android:id="@+id/editText_passwordVerify"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Şifrenizi tekrar giriniz"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/textView_labelPasswordVerify"
+        app:layout_constraintTop_toBottomOf="@+id/textView_labelPasswordVerify" />
+
+    <Button
+        android:id="@+id/button_signUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorButton"
+        android:text="Üye Ol"
+        android:onClick="SignUp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_passwordVerify"
+        app:layout_constraintStart_toStartOf="@+id/editText_passwordVerify"
+        app:layout_constraintTop_toBottomOf="@+id/editText_passwordVerify" />
 </androidx.constraintlayout.widget.ConstraintLayout>
