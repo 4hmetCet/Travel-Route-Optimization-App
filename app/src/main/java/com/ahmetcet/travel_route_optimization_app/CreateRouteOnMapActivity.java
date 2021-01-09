@@ -328,6 +328,7 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
     }
 
     public void OptimizeRoute(View view) {
+
         if(currentPointList.size() == 0){
             Toast.makeText(CreateRouteOnMapActivity.this,"Rota oluşturmak için en az bir nokta seçmelisiniz",Toast.LENGTH_LONG).show();
             return;
