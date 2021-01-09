@@ -309,7 +309,14 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                 dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String date = datePicker.getDayOfMonth() + "-" + datePicker.getMonth() + "-" + datePicker.getYear();
+                        String dayofMounth = String.valueOf(datePicker.getDayOfMonth());
+                        if(dayofMounth.length() == 1)
+                            dayofMounth = "0" + dayofMounth;
+                        String mounth = String.valueOf(datePicker.getMonth()+1);
+                        if(mounth.length() == 1)
+                            mounth = "0" + mounth;
+
+                        String date = dayofMounth + "-" + mounth + "-" + datePicker.getYear();
                         editText_datePicker.setText(date);
                         alertDialog.dismiss();
                     }});
@@ -321,6 +328,10 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
     }
 
     public void OptimizeRoute(View view) {
+        if(currentPointList.size() == 0){
+            Toast.makeText(CreateRouteOnMapActivity.this,"Rota oluşturmak için en az bir nokta seçmelisiniz",Toast.LENGTH_LONG).show();
+            return;
+        }
 
         ProgressDialog progressDialog = new ProgressDialog(CreateRouteOnMapActivity.this);
         progressDialog.setMessage("Rotanız Oluşturuluyor, bu işlem biraz uzun sürebilir");
