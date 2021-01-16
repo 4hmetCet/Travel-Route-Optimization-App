@@ -34,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -44,6 +45,8 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
     private final static float cameraZoomLevel = 18.0f;
     private Route current_route = null;
     private ArrayList<PointWithConstraints> currentPointList = new ArrayList<>();
+    private FloatingActionButton searchRoutesButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,17 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+       searchRoutesButton  = (FloatingActionButton)findViewById(R.id.fab_searchRoutes);
+        searchRoutesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressDialog progressDialog = new ProgressDialog(CreateRouteOnMapActivity.this);
+                progressDialog.setTitle("Lütfen Bekleyiniz");
+                progressDialog.setMessage("Bu bölgedeki benzer rotalar bulunuyor...");
+                progressDialog.setCancelable(true);
+                progressDialog.show();
+            }
+        });
         OpenRouteSettingsDialog();
     }
 
@@ -143,7 +157,6 @@ public class CreateRouteOnMapActivity extends FragmentActivity implements OnMapR
                                 .title(editText_pointName.getText().toString())
                         );
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, cameraZoomLevel));
-
                         point.setPointName(editText_pointName.getText().toString());
                         point.setPointId(UUID.randomUUID().toString());
                         point.setRouteId(current_route.getRouteId());
