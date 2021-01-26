@@ -8,6 +8,7 @@ public class Route {
     private String routeName;
     private ArrayList<PointWithConstraints> pointList;
     private String routeDate;
+    private String routeBounds;
     private int travelType;
 
     public void setRouteId(String routeId) {
@@ -56,5 +57,13 @@ public class Route {
 
     public String getRouteName() {
         return routeName;
+    }
+
+    public void setRouteBounds(String routeBounds) {
+        this.routeBounds = routeBounds;
+    }
+
+    public String getRouteBounds() {
+        return routeBounds;
     }
 }
