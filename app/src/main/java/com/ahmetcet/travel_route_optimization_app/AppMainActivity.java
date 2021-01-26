@@ -31,6 +31,7 @@ public class AppMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         currRouteId = PrefManager.getCurrentRouteId(AppMainActivity.this);
 
         final FloatingActionButton fab_createRoute = findViewById(R.id.fab_createRoute);

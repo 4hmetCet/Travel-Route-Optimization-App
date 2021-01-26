@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "69528831891",
+    "project_id": "travel-route-optimization-app",
+    "storage_bucket": "travel-route-optimization-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69528831891:android:2c7dce4daeb95b8a2c4a66",
+        "android_client_info": {
+          "package_name": "com.ahmetcet.travel_route_optimization_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69528831891-2hu71gdqackhj28e5e6fflbe5a1s7tba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ahmetcet.travel_route_optimization_app",
+            "certificate_hash": "9ad8bf1a378406a56e64b1dc8d0a145c9f0caa59"
+          }
+        },
+        {
+          "client_id": "69528831891-ac3akhieufn0mecbmllnuhbu1d9qsp8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrK4ztbDCqN9yQJZtVoIOnKYKrBkNwlXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69528831891-ac3akhieufn0mecbmllnuhbu1d9qsp8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
