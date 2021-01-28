@@ -3,6 +3,13 @@ package com.ahmetcet.travel_route_optimization_app.LocalData;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 public class PrefManager {
     public static String userInfo = "user_authentication_info";
     //userInfo
@@ -13,6 +20,7 @@ public class PrefManager {
     final public static String key_userId="userId";
 
     final public static String currentRouteId="currentRoute";
+    final public static String users="users";
 
 
 
@@ -63,6 +71,53 @@ public class PrefManager {
     public static String getCurrentRouteId(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(userInfo, Context.MODE_PRIVATE);
         return preferences.getString(currentRouteId, "");
+    }
+
+
+    //Key - Value user ınfoya kaydeder.
+    public static boolean saveUser ( User user, Context context) {
+        try {
+            Gson gson = new Gson();
+            ArrayList<User> allUsers = getAllUsers(context);
+            allUsers.add(user);
+            SharedPreferences prefs = context.getSharedPreferences(users, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(users, gson.toJson(allUsers));
+            editor.commit();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    //Key - Value user ınfodan okur.
+    public static boolean checkUser(User user, Context context) {
+        boolean result = false;
+        ArrayList<User> allUsers = getAllUsers(context);
+        for (User user_item :
+                allUsers) {
+            if(user_item.getUserName().equals(user.getUserName()) && user_item.getPassword().equals(user.getPassword())){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<User> getAllUsers(Context context) {
+        ArrayList<User> resultList = new ArrayList<>();
+        Gson gson = new Gson();
+        Type listOfMyClassObject = new TypeToken<ArrayList<User>>() {}.getType();
+        SharedPreferences preferences = context.getSharedPreferences(users, Context.MODE_PRIVATE);
+        String json_users = null;
+        try {
+            json_users = preferences.getString(users, "");
+            resultList = gson.fromJson(json_users,listOfMyClassObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(resultList == null)
+            return new ArrayList<User>();
+        return resultList;
     }
 
 }

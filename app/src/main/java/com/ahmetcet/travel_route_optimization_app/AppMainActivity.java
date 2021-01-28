@@ -74,7 +74,7 @@ public class AppMainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_myRoutes, R.id.nav_offlineMap)
+                R.id.nav_home, R.id.nav_myRoutes)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -103,6 +103,15 @@ public class AppMainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 startActivity(new Intent(AppMainActivity.this, CreateRouteOnMapActivity.class));
+                return true;
+            }
+        });
+
+        MenuItem createRouteItem_offlineMap = navigationView.getMenu().findItem(R.id.nav_offlineMap);
+        createRouteItem_offlineMap.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                startActivity(new Intent(AppMainActivity.this, OfflineMapActivity.class));
                 return true;
             }
         });

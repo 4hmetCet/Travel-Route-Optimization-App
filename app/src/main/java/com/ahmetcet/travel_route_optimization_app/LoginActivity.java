@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ThemedSpinnerAdapter;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,8 +41,11 @@ public class LoginActivity extends AppCompatActivity {
             edt_loginPassword.setError("Şifre alanı boş olamaz");
             return;
         }
+        User user = new User();
+        user.setUserName(input_loginMail);
+        user.setPassword(input_loginPassword);
 
-        if(!input_loginMail.equals("ahmet") || !input_loginPassword.equals("1234")){
+        if(!PrefManager.checkUser(user,LoginActivity.this)){
             Tools.ShowErrorDialog(LoginActivity.this,"Girilen kullanıcı adı veya şifre hatalı",true);
             return;
         }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +21,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText editText_email;
     EditText editText_pass;
     EditText editText_passVerify;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class SignupActivity extends AppCompatActivity {
             progressDialog.create();
             progressDialog.show();
 
+
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -49,19 +53,31 @@ public class SignupActivity extends AppCompatActivity {
             }
             progressDialog.dismiss();
 
-            //todo:Servis kodlamaları yapılacak
-            new AlertDialog.Builder(SignupActivity.this)
-                    .setTitle("İşlem başarılı")
-                    .setMessage("Bilgileriniz başarıyla kaydedilmiştir.")
-                    .setCancelable(false)
-                    .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(SignupActivity.this,LoginActivity.class));
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+            User user = new User();
+            user.setPassword(password);
+            user.setUserName(email);
+            if (PrefManager.saveUser(user,SignupActivity.this)){
+                new AlertDialog.Builder(SignupActivity.this)
+                        .setTitle("İşlem başarılı")
+                        .setMessage("Bilgileriniz başarıyla kaydedilmiştir.")
+                        .setCancelable(false)
+                        .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(SignupActivity.this,LoginActivity.class));
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }else{
+                new AlertDialog.Builder(SignupActivity.this)
+                        .setTitle("Hata")
+                        .setMessage("İşlem sırasında bir hata oluştu")
+                        .setCancelable(true)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
 
         }
 
