@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.ahmetcet.travel_route_optimization_app.LocalData.PrefManager;
+import com.ahmetcet.travel_route_optimization_app.LocalData.SQLiteDataProvider;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.PointWithConstraints;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Model.Route;
+import com.ahmetcet.travel_route_optimization_app.RouteOptimizing.Optimize;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -30,6 +36,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.offline.OfflineRegionError;
@@ -71,6 +78,11 @@ public class OfflineMapActivity extends AppCompatActivity implements OnMapReadyC
     // Offline objects
     private OfflineManager offlineManager;
     private OfflineRegion offlineRegion;
+    private SQLiteDataProvider sqLiteDataProvider;
+    private Optimize optimize;
+    private PointWithConstraints nextPoint = null;
+    private ArrayList<PointWithConstraints> pointList;
+    private String currRouteId;
 
 
     @Override
@@ -84,31 +96,27 @@ public class OfflineMapActivity extends AppCompatActivity implements OnMapReadyC
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.activity_offline_map);
 
+        sqLiteDataProvider = new SQLiteDataProvider(OfflineMapActivity.this);
+        currRouteId = PrefManager.getCurrentRouteId(OfflineMapActivity.this);
+        optimize = new Optimize(OfflineMapActivity.this,new Route());
+        pointList = sqLiteDataProvider.getPointListByRouteId(OfflineMapActivity.this,currRouteId);
+
         // Set up the MapView
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(@NonNull MapboxMap mapboxMap) {
+            public void onMapReady(final @NonNull MapboxMap mapboxMap) {
                 map = mapboxMap;
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(40.188, 29.061))
-                        .title("Test")
-                        .snippet("Acıklama")
-
-                );
                 mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override
                     public boolean onMapClick(@NonNull LatLng point) {
                         map.addMarker(new MarkerOptions()
                                 .position(new LatLng(point.getLatitude(), point.getLongitude()))
-                                .title("Test")
-                                .snippet("Acıklama")
+                                .title("Seçili Konum")
 
                         );
-                        Toast.makeText(OfflineMapActivity.this, String.format("User clicked at: %s", point.toString()), Toast.LENGTH_LONG).show();
-
                         return true;
                     }
                 });
@@ -117,6 +125,10 @@ public class OfflineMapActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
+                        UiSettings uiSettings = mapboxMap.getUiSettings();
+
+                        uiSettings.areAllGesturesEnabled();
+
                         // Assign progressBar for later use
                         progressBar = findViewById(R.id.progress_bar);
 
@@ -143,8 +155,15 @@ public class OfflineMapActivity extends AppCompatActivity implements OnMapReadyC
                         });
                     }
                 });
+
+                if(pointList != null && pointList.size() > 0 ){
+                    pointList = optimize.OrderPointsByCurrentLocation(pointList,new com.google.android.gms.maps.model.LatLng(40.824215,29.372234));
+                    mapRoute(mapboxMap);
+                }
+
             }
         });
+
     }
 
 
@@ -153,6 +172,23 @@ public class OfflineMapActivity extends AppCompatActivity implements OnMapReadyC
         OfflineMapActivity.this.map = mapboxMap;
         map = mapboxMap;
 
+
+    }
+
+    private void mapRoute(MapboxMap map){
+        try {
+            for (PointWithConstraints point :
+                    pointList) {
+                    map.addMarker(new MarkerOptions()
+                            .position(new LatLng(point.getPointLocation().latitude, point.getPointLocation().longitude))
+                            .title(point.getPointName())
+
+                    );
+                }
+
+        } catch (SQLException e) {
+
+        }
     }
 
 

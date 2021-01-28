@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Locati
         map.setBuildingsEnabled(true);
 
         if(pointList != null && pointList.size() > 0 ){
-            pointList = optimize.OrderPointsByCurrentLocation(pointList,new LatLng(38.5043,27.7045));
+            pointList = optimize.OrderPointsByCurrentLocation(pointList,new LatLng(40.824215,29.372234));
             mapRoute();
         }else{
             btn_nextPoint.setVisibility(View.INVISIBLE);
